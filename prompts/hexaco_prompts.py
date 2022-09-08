@@ -109,7 +109,7 @@ for temp in temp_list:
         query = "Below is a statement about you. Please read it and decide how much you agree or disagree with that statement. Write your response using the following scale:/n/n5 = strongly agree/n4 = agree/n3 = neutral/n2 = disagree/n1 = strongly disagree./n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
         response_prompt = "\nResponse:"
         # Complete query
-        fullquestion = query + response_prompt + question
+        fullquestion = query + question + response_prompt
         #Created List for current question
         question_list = []
         # Ask AI for output
