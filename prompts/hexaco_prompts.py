@@ -133,5 +133,5 @@ for temp in temp_list:
         i += 1
     # Save temperature dataframe as csv
     tempcurrent.columns = index_list
-    filename = "./data/non_reinforced_temperature_" + str(temp) + '.csv'
+    filename = "./data/hexaco_non_reinforced_temperature_" + str(temp) + '.csv'
     tempcurrent.to_csv(filename)

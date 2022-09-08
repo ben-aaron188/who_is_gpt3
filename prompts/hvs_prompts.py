@@ -1,7 +1,7 @@
 import pandas as pd
 import openai
 
-openai.api_key = "YOURKEY"
+openai.api_key = "KEY"
 
 #meta params.
 n_runs = 5
@@ -116,5 +116,5 @@ for temp in temp_list:
         # Changing columns name for clarity
         tempcurrent.columns = col_list
         # Save temperature dataframe as csv
-        filename = "./data/non_reinforced_hvs_temperature_" + str(temp) + '.csv'
+        filename = "./data/hvs_non_reinforced_temperature_" + str(temp) + '.csv'
         tempcurrent.to_csv(filename, index=False)
