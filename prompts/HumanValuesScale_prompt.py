@@ -83,6 +83,6 @@ for temp in temp_list:
     tempcurrent.columns = col_list
     # Save temperature dataframe as csv
     filename = "HVS_temperature" + str(temp) + '.csv'
-    tempcurrent.to_csv(filename)
+    tempcurrent.to_csv(filename, index=False)
     
     
