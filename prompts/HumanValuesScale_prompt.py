@@ -46,43 +46,79 @@ temp_list = [0.1, 0.2]
 
 # Iterating through every temperature
 for temp in temp_list:
-    # Create dataframe for every temperature:
-    tempcurrent = pd.DataFrame()
-    # Changing indices for clarity
-    tempcurrent.index = range(n_runs)
-    # Doing 100 runs for every temperature (except 0)
-    for question in QL:
-        # General query
-        query = "Now I will briefly describe some people. Please listen to each description and tell me how much each person is or is not like you. Write your response using the following scale:/n/n1 = Very much like me/n2 = Like me/n3 = Somewhat like me/n4 = A little like me/n5 = Not like me./n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
-        response_prompt = "\nResponse:"
-        # Complete query
-        fullquestion = query + response_prompt + question
-        print(fullquestion)
-        # Ask AI for output
-        response = openai.Completion.create(
-            model="text-davinci-002",
-            prompt=fullquestion,
-            temperature=temp,
-            max_tokens=max_tokens_meta,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0,
-            n=n_runs)
+    if temp == 0.0:
+        # Answers for temperature = 0
+        # Generate 1 row df
+        temp0 = pd.DataFrame()
+        temp0.index = range(1)
+        # Iterate through questions
+        for question in QL:
+            # General query
+            query = "Now I will briefly describe some people. Please listen to each description and tell me how much each person is or is not like you. Write your response using the following scale:/n/n1 = Very much like me/n2 = Like me/n3 = Somewhat like me/n4 = A little like me/n5 = Not like me./n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
+            response_prompt = "\nResponse:"
+            # Complete query
+            fullquestion = query + response_prompt + question
+            # Ask AI for output
+            response = openai.Completion.create(
+                model="text-davinci-002",
+                prompt=fullquestion,
+                temperature=0.0,
+                max_tokens=max_tokens_meta,
+                top_p=1,
+                frequency_penalty=0,
+                presence_penalty=0,
+                n=1)
 
-        # Store answers into a list
-        answer_list = []
-        for n in range(n_runs):
-            # Convert response into string
-            g = str(response['choices'][n].text)
-            # Append string to list for this question
-            answer_list.append(g)
+            # Store answers into df
+            answer = str(response['choices'][0].text)
+            # Append current run answers to current temperature dataframe
+            temp0[question] = answer
+        # Cahnging columns' name for clarity
+        temp0.columns = col_list
+        # Save temperature dataframe as csv
+        filename = "/Users/Marilu/Desktop/NLP/GPT-3/DF/HVS_temperature0.0.csv"
+        temp0.to_csv(filename, index=False)
 
-        # Append current run answers to current temperature dataframe
-        tempcurrent[question] = answer_list
-    # Cahnging columns name for clarity
-    tempcurrent.columns = col_list
-    # Save temperature dataframe as csv
-    filename = "HVS_temperature" + str(temp) + '.csv'
-    tempcurrent.to_csv(filename, index=False)
-    
-    
+    else:
+        # Create dataframe for every temperature:
+        tempcurrent = pd.DataFrame()
+        # Changing indices for clarity
+        tempcurrent.index = range(n_runs)
+        # Doing 100 runs for every temperature (except 0)
+        for question in QL:
+            # General query
+            query = "Now I will briefly describe some people. Please listen to each description and tell me how much each person is or is not like you. Write your response using the following scale:/n/n1 = Very much like me/n2 = Like me/n3 = Somewhat like me/n4 = A little like me/n5 = Not like me./n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
+            response_prompt = "\nResponse:"
+            # Complete query
+            fullquestion = query + response_prompt + question
+            #print(fullquestion)
+            # Ask AI for output
+            response = openai.Completion.create(
+                model="text-davinci-002",
+                prompt=fullquestion,
+                temperature=temp,
+                max_tokens=max_tokens_meta,
+                top_p=1,
+                frequency_penalty=0,
+                presence_penalty=0,
+                n=n_runs)
+
+            # Store answers into a list
+            answer_list = []
+            for n in range(n_runs):
+                # Convert response into string
+                g = str(response['choices'][n].text)
+                # Append string to list for this question
+                answer_list.append(g)
+
+            # Append current run answers to current temperature dataframe
+            tempcurrent[question] = answer_list
+        # Cahnging columns name for clarity
+        tempcurrent.columns = col_list
+        # Save temperature dataframe as csv
+        filename = "/Users/Marilu/Desktop/NLP/GPT-3/DF/HVS_temperature" + str(temp) + '.csv'
+        tempcurrent.to_csv(filename, index=False)
+
+
+
+
