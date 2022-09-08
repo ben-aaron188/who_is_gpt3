@@ -1,15 +1,22 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Sep  8 09:13:46 2022
+
+@author: nicolarossberg
+"""
+
 import pandas as pd
 import openai
-import re
 
-openai.api_key = "YOURKEY"
+openai.api_key = "KEY"
 
 
 #meta params.
 n_runs = 5
 max_tokens_meta = 20
 
-# Creating the list of questions
+# # Creating the list of questions
 QL = ["I would be quite bored by a visit to an art gallery.", "I plan ahead and organize things, to avoid scrambling at the last minute.",
       "I rarely hold a grudge, even against people who have badly wronged me.", "I feel reasonably satisfied with myself overall.",
       "I would feel afraid if I had to travel in bad weather conditions.", "I wouldn't use flattery to get a raise or promotion at work, even if I thought it would succeed.",
@@ -41,73 +48,90 @@ QL = ["I would be quite bored by a visit to an art gallery.", "I plan ahead and 
       "When I’m in a group of people, I’m often the one who speaks on behalf of the group.", "I remain unemotional even in situations where most people get very sentimental.",
       "I’d be tempted to use counterfeit money, if I were sure I could get away with it."]
 
-# Create List of desired indexes
-index_list = ['Sex', 'Age']
+
+# Create list of desired indexes
+index_list = ['sex', 'age']
 for n in range(1, 61):
     index_list.append('Q' + str(n))
 
 # Create list of temperatures:
 #temp_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-temp_list = [0.1, 0.2]
+temp_list = [0.1]
 
-# Mechanism recording sex and Age
+
 # Iterating through every temperature
 for temp in temp_list:
     # Create dataframe for every temperature:
     tempcurrent = pd.DataFrame()
     # Chaning indices for clarity
-    tempcurrent.index = index_list
-    # Doing 100 runs for every temperature (except 0)
-    for n in range(1, (n_runs+1)):
-        # Create empty list for current run
-        answer_list = []
-        # Add Sex to list
+    #tempcurrent.index = index_list
+    tempcurrent.index = range(n_runs)
+    #Create list for sex
+    sex_list = []
+    #Request n_runs ages
+    response = openai.Completion.create(
+        model="text-davinci-002",
+        prompt='What is your gender?',
+        temperature=temp,
+        max_tokens=max_tokens_meta,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,
+        n = n_runs)
+    #Add sexes to list
+    for n in range(n_runs):
+        sex = str(response['choices'][n].text)
+        sex_list.append(sex[2:])
+    #Add sexes to Dataframe:
+    tempcurrent['sex'] = sex_list
+    #Create age list
+    age_list = []
+    #Request n_run ages
+    response = openai.Completion.create(
+        model="text-davinci-002",
+        prompt='How old are you?',
+        temperature=temp,
+        max_tokens=max_tokens_meta,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,
+        n=1)
+    #Convert age-statements into int and append to list
+    for n in range(n_runs):
+        age = str(response['choices'][0].text)
+        age_list.append([int(s) for s in age.split() if s.isdigit()][0])
+    #Add ages to Dataframe:
+    tempcurrent['age'] = age_list
+    #Set i for enumerating purposes:
+    i = 1
+    for question in QL:
+        # General query
+        query = "Below is a statement about you. Please read it and decide how much you agree or disagree with that statement. Write your response using the following scale:/n/n5 = strongly agree/n4 = agree/n3 = neutral/n2 = disagree/n1 = strongly disagree./n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
+        response_prompt = "\nResponse:"
+        # Complete query
+        fullquestion = query + response_prompt + question
+        #Created List for current question
+        question_list = []
+        # Ask AI for output
         response = openai.Completion.create(
             model="text-davinci-002",
-            prompt='What is your gender?',
-            temperature=temp,
-            max_tokens=max_tokens_meta,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0)
-        sex = str(response['choices'][0].text)
-        answer_list.append(sex)
-
-        response = openai.Completion.create(
-            model="text-davinci-002",
-            prompt='How old are you?',
+            prompt=fullquestion,
             temperature=temp,
             max_tokens=max_tokens_meta,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0,
-            n=n_runs)
-        age = str(response['choices'][0].text)
-        answer_list.append(age)
-
-        for question in QL:
-            # General query
-            query = "Below is a statement about you. Please read it and decide how much you agree or disagree with that statement. Write your response using the following scale:/n/n5 = strongly agree/n4 = agree/n3 = neutral/n2 = disagree/n1 = strongly disagree./n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
-            response_prompt = "\nResponse:"
-            # Complete query
-            fullquestion = query + response_prompt + question
-            print(fullquestion)
-            # Ask AI for output
-            response = openai.Completion.create(
-                model="text-davinci-002",
-                prompt=fullquestion,
-                temperature=temp,
-                max_tokens=max_tokens_meta,
-                top_p=1,
-                frequency_penalty=0,
-                presence_penalty=0)
-            # Convert output into string
-            g = str(response['choices'][0].text)
-            #g = int(re.findall('\d+', str(list((list(response.values())[4][0]).values())[0]))[0])
-            # Append string to list for this run
-            answer_list.append(g)
-        # Append current run answers to current temperature dataframe
-        tempcurrent[n] = answer_list
+            n = n_runs)
+        #Convert responses to list of responses
+        for n in range(n_runs):
+            question = str(response['choices'][n].text)
+            #Isolate number
+            #question_list.append(int(s) for s in question.split() if s.isdigit()[0])
+        #Append answers to question to dataframe
+        tempcurrent[i] = question
+        #Increase i by one (indicating next question for enumeration)
+        i += 1
     # Save temperature dataframe as csv
-    filename = "nonpromted_temperature" + str(temp) + '.csv'
-    tempcurrent.to_csv('filename')
+    tempcurrent.columns = index_list
+    filename = "./data/non_reinforced_temperature_" + str(temp) + '.csv'
+    tempcurrent.to_csv(filename)

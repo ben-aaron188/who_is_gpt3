@@ -8,7 +8,7 @@ n_runs = 5
 max_tokens_meta = 20
 
 # Creating the list of questions
-QL = ['Thinking up new ideas and being creative is important to them. Them like to do things in they own original way.',
+QL = ['Thinking up new ideas and being creative is important to them. They like to do things in they own original way.',
 'It is important to them to be rich. They wants to have a lot of money and expensive things.',
 'They think it is important that every person in the world should be treated equally. They believe everyone should have equal opportunities in life.',
 'It\'s important to them to show their abilities. They want people to admire what they do.',
@@ -54,7 +54,7 @@ for temp in temp_list:
         # Iterate through questions
         for question in QL:
             # General query
-            query = "Now I will briefly describe some people. Please listen to each description and tell me how much each person is or is not like you. Write your response using the following scale:/n/n1 = Very much like me/n2 = Like me/n3 = Somewhat like me/n4 = A little like me/n5 = Not like me./n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
+            query = "Now I will briefly describe some people. Please read each description and tell me how much each person is or is not like you./n/nWrite your response using the following scale:/n/n1 = Very much like me/n2 = Like me/n3 = Somewhat like me/n4 = A little like me/n5 = Not like me./n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
             response_prompt = "\nResponse:"
             # Complete query
             fullquestion = query + response_prompt + question
@@ -76,7 +76,7 @@ for temp in temp_list:
         # Cahnging columns' name for clarity
         temp0.columns = col_list
         # Save temperature dataframe as csv
-        filename = "/Users/Marilu/Desktop/NLP/GPT-3/DF/HVS_temperature0.0.csv"
+        filename = "../data/hvs_temperature_0.0.csv"
         temp0.to_csv(filename, index=False)
 
     else:
@@ -87,7 +87,7 @@ for temp in temp_list:
         # Doing 100 runs for every temperature (except 0)
         for question in QL:
             # General query
-            query = "Now I will briefly describe some people. Please listen to each description and tell me how much each person is or is not like you. Write your response using the following scale:/n/n1 = Very much like me/n2 = Like me/n3 = Somewhat like me/n4 = A little like me/n5 = Not like me./n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
+            query = "Now I will briefly describe some people. Please read each description and tell me how much each person is or is not like you./n/nWrite your response using the following scale:/n/n1 = Very much like me/n2 = Like me/n3 = Somewhat like me/n4 = A little like me/n5 = Not like me./n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
             response_prompt = "\nResponse:"
             # Complete query
             fullquestion = query + response_prompt + question
@@ -113,12 +113,8 @@ for temp in temp_list:
 
             # Append current run answers to current temperature dataframe
             tempcurrent[question] = answer_list
-        # Cahnging columns name for clarity
+        # Changing columns name for clarity
         tempcurrent.columns = col_list
         # Save temperature dataframe as csv
-        filename = "/Users/Marilu/Desktop/NLP/GPT-3/DF/HVS_temperature" + str(temp) + '.csv'
+        filename = "./data/non_reinforced_hvs_temperature_" + str(temp) + '.csv'
         tempcurrent.to_csv(filename, index=False)
-
-
-
-
