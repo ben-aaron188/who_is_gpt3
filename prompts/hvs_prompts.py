@@ -57,7 +57,7 @@ for temp in temp_list:
             query = "Now I will briefly describe some people. Please read each description and tell me how much each person is or is not like you./n/nWrite your response using the following scale:/n/n1 = Very much like me/n2 = Like me/n3 = Somewhat like me/n4 = A little like me/n5 = Not like me./n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
             response_prompt = "\nResponse:"
             # Complete query
-            fullquestion = query + response_prompt + question
+            fullquestion = query + question + response_prompt
             # Ask AI for output
             response = openai.Completion.create(
                 model="text-davinci-002",
@@ -90,7 +90,7 @@ for temp in temp_list:
             query = "Now I will briefly describe some people. Please read each description and tell me how much each person is or is not like you./n/nWrite your response using the following scale:/n/n1 = Very much like me/n2 = Like me/n3 = Somewhat like me/n4 = A little like me/n5 = Not like me./n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
             response_prompt = "\nResponse:"
             # Complete query
-            fullquestion = query + response_prompt + question
+            fullquestion = query + question + response_prompt
             #print(fullquestion)
             # Ask AI for output
             response = openai.Completion.create(
