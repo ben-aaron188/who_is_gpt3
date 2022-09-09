@@ -96,7 +96,7 @@ for temp in temp_list:
         n=1)
     #Convert age-statements into int and append to list
     for n in range(n_runs):
-        age = str(response['choices'][0].text)
+        age = str(response['choices'][n].text)
         age_list.append([int(s) for s in age.split() if s.isdigit()][0])
         prompt_age_list.append('How old are you?')
     #Add ages to Dataframe:
