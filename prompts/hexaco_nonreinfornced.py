@@ -91,7 +91,7 @@ for temp in temp_list:
         # Cahnging columns' name for clarity
         temp0.columns = col_list
         # Save temperature dataframe as csv
-        filename = "hexaco_temperature_0.0.csv"
+        filename = "../data/hexaco_temperature_0.0.csv"
         temp0.to_csv(filename, index=False)
 
     else:
@@ -131,5 +131,5 @@ for temp in temp_list:
         # Changing columns name for clarity
         tempcurrent.columns = col_list
         # Save temperature dataframe as csv
-        filename = "hexaco_non_reinforced_temperature_" + str(temp) + '.csv'
+        filename = "../data/hexaco_non_reinforced_temperature_" + str(temp) + '.csv'
         tempcurrent.to_csv(filename, index=False)
