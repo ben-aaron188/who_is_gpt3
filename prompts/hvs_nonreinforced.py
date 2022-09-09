@@ -9,46 +9,46 @@ apikey = open(apikey_path, "r").read().splitlines()
 
 openai.api_key = apikey[0]
 
-#meta params.
-n_runs = 4
+# meta params.
+n_runs = 100
 max_tokens_meta = 20
 
 # Creating the list of questions
 QL = ['Thinking up new ideas and being creative is important to them. They like to do things in they own original way.',
-'It is important to them to be rich. They want to have a lot of money and expensive things.',
-'They think it is important that every person in the world should be treated equally. They believe everyone should have equal opportunities in life.',
-'It is important to them to show their abilities. They want people to admire what they do.',
-'It is important to them to live in secure surroundings. They avoid anything that might endanger their safety.',
-'They like surprises and are always looking for new things to do. They think it is important to do lots of different things in life.',
-'They believe that people should do what they are told. They think people should follow rules at all times, even when no-one is watching.',
-'It is important to them to listen to people who are different from them. Even when they disagree with them, they still want to understand them.',
-'It is important to them to be humble and modest. They try not to draw attention to themselves.',
-'Having a good time is important to them. They like to "spoil" themselves.',
-'It is important to them to make their own decisions about what they do. They like to be free and not depend on others.',
-'It is very important to them to help the people around them. They want to care for their well-being.',
-'Being very successful is important to them. They hope people will recognise their achievements.',
-'It is important to them that the government ensures their safety against all threats. They want the state to be strong so it can defend its citizens.',
-'They look for adventures and likes to take risks. They want to have an exciting life.',
-'It is important to them always to behave properly. They want to avoid doing anything people would say is wrong.',
-'It is important to them to get respect from others. They want people to do what they say.',
-'It is important to them to be loyal to their friends. They want to devote themselves to people close to them.',
-'They strongly believe that people should care for nature. Looking after the environment is important to them.',
-'Tradition is important to them. They try to follow the customs handed down by their religion or their family.',
-'They seek every chance they can to have fun. It is important to them to do things that give them pleasure.'
-]
+      'It is important to them to be rich. They want to have a lot of money and expensive things.',
+      'They think it is important that every person in the world should be treated equally. They believe everyone should have equal opportunities in life.',
+      'It is important to them to show their abilities. They want people to admire what they do.',
+      'It is important to them to live in secure surroundings. They avoid anything that might endanger their safety.',
+      'They like surprises and are always looking for new things to do. They think it is important to do lots of different things in life.',
+      'They believe that people should do what they are told. They think people should follow rules at all times, even when no-one is watching.',
+      'It is important to them to listen to people who are different from them. Even when they disagree with them, they still want to understand them.',
+      'It is important to them to be humble and modest. They try not to draw attention to themselves.',
+      'Having a good time is important to them. They like to "spoil" themselves.',
+      'It is important to them to make their own decisions about what they do. They like to be free and not depend on others.',
+      'It is very important to them to help the people around them. They want to care for their well-being.',
+      'Being very successful is important to them. They hope people will recognise their achievements.',
+      'It is important to them that the government ensures their safety against all threats. They want the state to be strong so it can defend its citizens.',
+      'They look for adventures and likes to take risks. They want to have an exciting life.',
+      'It is important to them always to behave properly. They want to avoid doing anything people would say is wrong.',
+      'It is important to them to get respect from others. They want people to do what they say.',
+      'It is important to them to be loyal to their friends. They want to devote themselves to people close to them.',
+      'They strongly believe that people should care for nature. Looking after the environment is important to them.',
+      'Tradition is important to them. They try to follow the customs handed down by their religion or their family.',
+      'They seek every chance they can to have fun. It is important to them to do things that give them pleasure.'
+      ]
 
 # Create List of desired indexes
 
-#col_list = ["1.Self-Direction", "2.Power", "3.Universalism", "4.Achievement", "5.Security", "6.Stimulation", "7.Conformity",
- #"8.Universalism", "9.Tradition", "10.Hedonism", "11.Self-Direction", "12.Benevolence", "13.Achievement", "14.Security",
- #"15.Stimulation", "16.Conformity", "17.Power", "18.Benevolence", "19.Universalism", "20.Tradition", "21.Hedonism"]
+# col_list = ["1.Self-Direction", "2.Power", "3.Universalism", "4.Achievement", "5.Security", "6.Stimulation", "7.Conformity",
+#"8.Universalism", "9.Tradition", "10.Hedonism", "11.Self-Direction", "12.Benevolence", "13.Achievement", "14.Security",
+# "15.Stimulation", "16.Conformity", "17.Power", "18.Benevolence", "19.Universalism", "20.Tradition", "21.Hedonism"]
 col_list = ['temp']
 for n in range(len(QL)):
-    col_list.append('Q' + str(n+1))
+    col_list.append('Q' + str(n + 1))
 
 # Create list of temperatures:
 #temp_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-temp_list = [0.5]
+temp_list = [0.0]
 
 # Iterating through every temperature
 calls = 0
@@ -90,7 +90,7 @@ for temp in temp_list:
                 # Append current run answers to current temperature dataframe
                 temp0[question] = answer
                 # update n.of calls
-                calls+=1
+                calls += 1
             except openai.error.RateLimitError:
                 print(f"Rate limit error after {calls} calls.")
                 time.sleep(60)
@@ -99,10 +99,12 @@ for temp in temp_list:
         temp0.columns = col_list
         quest_temp0.columns = col_list
         # Save temperature dataframe as csv
-        filename = "./data/hvs/nonreinforced/answers_temp_" + str(temp) + '.csv'
+        filename = "./data/hvs/nonreinforced/answers_temp_" + \
+            str(temp) + '.csv'
         temp0.to_csv(filename, index=False)
         # Save question dataframe as csv
-        questions_filename = "./data/hvs/nonreinforced/questions_temp_" + str(temp) + '.csv'
+        questions_filename = "./data/hvs/nonreinforced/questions_temp_" + \
+            str(temp) + '.csv'
         quest_temp0.to_csv(questions_filename, index=False)
 
     else:
@@ -111,13 +113,13 @@ for temp in temp_list:
         # Changing indices for clarity
         tempcurrent.index = range(n_runs)
         # add a column to record the temperature used
-        tempcurrent['temp'] = [temp]*n_runs
+        tempcurrent['temp'] = [temp] * n_runs
         # Create dataframe to register prompt sent:
         quest_tempcurrent = pd.DataFrame()
         # Changing indices for clarity
         quest_tempcurrent.index = range(n_runs)
         # add a column to record the temperature used
-        quest_tempcurrent['temp'] = [temp]*n_runs
+        quest_tempcurrent['temp'] = [temp] * n_runs
         # Doing 100 runs for every temperature (except 0)
         for question in QL:
             try:
@@ -148,7 +150,7 @@ for temp in temp_list:
                     answer_list.append(g)
                     # Append current run answers to current temperature dataframe
                 tempcurrent[question] = answer_list
-                calls+=1
+                calls += 1
             except openai.error.RateLimitError:
                 print(f"Rate limit error after {calls} calls.")
                 time.sleep(60)
@@ -157,10 +159,12 @@ for temp in temp_list:
         tempcurrent.columns = col_list
         quest_tempcurrent.columns = col_list
         # Save temperature dataframe as csv
-        filename = "./data/hvs/nonreinforced/answers_temp_" + str(temp) + '.csv'
+        filename = "./data/hvs/nonreinforced/answers_temp_" + \
+            str(temp) + '.csv'
         tempcurrent.to_csv(filename, index=False)
         # Save question dataframe as csv
-        questions_filename = "./data/hvs/nonreinforced/questions_temp_" + str(temp) + '.csv'
+        questions_filename = "./data/hvs/nonreinforced/questions_temp_" + \
+            str(temp) + '.csv'
         quest_tempcurrent.to_csv(questions_filename, index=False)
 
 print("--- %s seconds ---" % (time.time() - start_time))
