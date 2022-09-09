@@ -8,7 +8,7 @@ Created on Fri Sep  9 11:58:07 2022
 import pandas as pd
 import openai
 
-openai.api_key = "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"
+openai.api_key = "KEY"
 
 
 #meta params.
