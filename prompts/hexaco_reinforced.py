@@ -65,7 +65,7 @@ for temp in temp_list:
         questcurrent = pd.DataFrame(columns=col_list, index=range(1))
         # set a column for temperature
         tempcurrent['temp'] = [temp]
-        prompt_tempcurrent['temp'] = [temp]
+        questcurrent['temp'] = [temp]
         sex_list = []
         prompt_sex_list = []
         #Request n_runs ages
@@ -146,7 +146,7 @@ for temp in temp_list:
         questcurrent = pd.DataFrame(columns=col_list, index=range(n_runs))
         # set a column for temperature
         tempcurrent['temp'] = [temp]*n_runs
-        prompt_tempcurrent['temp'] = [temp]*n_runs
+        questcurrent['temp'] = [temp]*n_runs
         # Doing 100 runs for every temperature (except 0)
         sex_list = []
         prompt_sex_list = []
