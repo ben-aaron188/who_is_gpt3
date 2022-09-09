@@ -78,7 +78,8 @@ for temp in temp_list:
             n = 1)
         #Add sex to list
         sex = str(response['choices'][0].text)
-        sex_list.append(sex[2:])
+        # sex_list.append(sex[2:])
+        sex_list.append(sex)
         prompt_sex_list.append('What is your gender?')
         #Add sexes to Dataframe:
         tempcurrent['sex'] = sex_list
@@ -98,7 +99,8 @@ for temp in temp_list:
             n=1)
         #Convert age-statements into int and append to list
         age = str(response['choices'][0].text)
-        age_list.append([int(s) for s in age.split() if s.isdigit()][0])
+        # age_list.append([int(s) for s in age.split() if s.isdigit()][0])
+        age_list.append(age)
         prompt_age_list.append('How old are you?')
         #Add ages to Dataframe:
         tempcurrent['age'] = age_list
@@ -156,7 +158,8 @@ for temp in temp_list:
         #Add sexes to list
         for n in range(n_runs):
             sex = str(response['choices'][n].text)
-            sex_list.append(sex[2:])
+            # sex_list.append(sex[2:])
+            sex_list.append(sex)
             prompt_sex_list.append('What is your gender?')
         #Add sexes to Dataframe:
         tempcurrent['sex'] = sex_list
@@ -177,7 +180,8 @@ for temp in temp_list:
         #Convert age-statements into int and append to list
         for n in range(n_runs):
             age = str(response['choices'][n].text)
-            age_list.append([int(s) for s in age.split() if s.isdigit()][0])
+            # age_list.append([int(s) for s in age.split() if s.isdigit()][0])
+            age_list.append(age)
             prompt_age_list.append('How old are you?')
         #Add ages to Dataframe:
         tempcurrent['age'] = age_list

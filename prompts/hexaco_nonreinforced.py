@@ -12,7 +12,7 @@ openai.api_key = apikey[0]
 
 
 #meta params.
-n_runs = 2
+n_runs = 10
 max_tokens_meta = 20
 
 # # Creating the list of questions
@@ -50,7 +50,7 @@ QL = ["I would be quite bored by a visit to an art gallery.", "I plan ahead and 
 
 # Create list of temperatures:
 #temp_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-temp_list = [0.2]
+temp_list = [0.9]
 
 col_list = []
 for n in range(len(QL)):
@@ -79,9 +79,10 @@ for temp in temp_list:
             frequency_penalty=0,
             presence_penalty=0,
             n = 1)
-        #Add sex to lis
+        #Add sex to list
         sex = str(response['choices'][0].text)
-        sex_list.append(sex[2:])
+        # sex_list.append(sex[2:])
+        sex_list.append(sex)
         prompt_sex_list.append('What is your gender?')
         #Add sexes to Dataframe:
         tempcurrent['sex'] = sex_list
@@ -101,7 +102,8 @@ for temp in temp_list:
             n=1)
         #Convert age-statements into int and append to list
         age = str(response['choices'][0].text)
-        age_list.append([int(s) for s in age.split() if s.isdigit()][0])
+        # age_list.append([int(s) for s in age.split() if s.isdigit()][0])
+        age_list.append(age)
         prompt_age_list.append('How old are you?')
         #Add ages to Dataframe:
         tempcurrent['age'] = age_list
@@ -130,8 +132,10 @@ for temp in temp_list:
             #Convert responses to list of responses
             prompt_question_list.append(question)
             resp = str(response['choices'][n].text)
+            print(resp)
             #Isolate number
-            question_list.append(int(resp[-1]))
+            # question_list.append(int(resp[-1]))
+            question_list.append(resp)
             #Append answers to question to dataframe
             tempcurrent['Q' +str(i)] = question_list
             prompt_tempcurrent['Q' + str(i)] = prompt_question_list
@@ -166,7 +170,8 @@ for temp in temp_list:
         #Add sexes to list
         for n in range(n_runs):
             sex = str(response['choices'][n].text)
-            sex_list.append(sex[2:])
+            # sex_list.append(sex[2:])
+            sex_list.append(sex)
             prompt_sex_list.append('What is your gender?')
         #Add sexes to Dataframe:
         tempcurrent['sex'] = sex_list
@@ -187,7 +192,8 @@ for temp in temp_list:
         #Convert age-statements into int and append to list
         for n in range(n_runs):
             age = str(response['choices'][n].text)
-            age_list.append([int(s) for s in age.split() if s.isdigit()][0])
+            # age_list.append([int(s) for s in age.split() if s.isdigit()][0])
+            age_list.append(age)
             prompt_age_list.append('How old are you?')
         #Add ages to Dataframe:
         tempcurrent['age'] = age_list
@@ -217,8 +223,10 @@ for temp in temp_list:
             for n in range(n_runs):
                 prompt_question_list.append(question)
                 resp = str(response['choices'][n].text)
+                print(resp)
                 #Isolate number
-                question_list.append(int(resp[-1]))
+                # question_list.append(int(resp[-1]))
+                question_list.append(resp)
             #Append answers to question to dataframe
             tempcurrent['Q' +str(i)] = question_list
             prompt_tempcurrent['Q' + str(i)] = prompt_question_list

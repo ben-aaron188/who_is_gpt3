@@ -48,7 +48,7 @@ for n in range(len(QL)):
 
 # Create list of temperatures:
 #temp_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-temp_list = [0.1, 0.2]
+temp_list = [0.8]
 
 # Iterating through every temperature
 calls = 0
@@ -149,7 +149,7 @@ for temp in temp_list:
         tempcurrent.columns = col_list
         quest_tempcurrent.columns = col_list
         # Save temperature dataframe as csv
-        filename = "./data/hvs/nonreinforced/questions_temp_" + str(temp) + '.csv'
+        filename = "./data/hvs/nonreinforced/answers_temp_" + str(temp) + '.csv'
         tempcurrent.to_csv(filename, index=False)
         # Save question dataframe as csv
         questions_filename = "./data/hvs/nonreinforced/questions_temp_" + str(temp) + '.csv'
