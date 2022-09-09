@@ -143,7 +143,7 @@ for temp in temp_list:
         tempcurrent.columns = col_list
         quest_tempcurrent.columns = col_list
         # Save temperature dataframe as csv
-        filename = "./data/hvs/nonreinforced/questions_temp_" + str(temp) + '.csv'
+        filename = "./data/hvs/nonreinforced/answers_temp_" + str(temp) + '.csv'
         tempcurrent.to_csv(filename, index=False)
         # Save question dataframe as csv
         questions_filename = "./data/hvs/nonreinforced/questions_temp_" + str(temp) + '.csv'
