@@ -12,7 +12,7 @@ openai.api_key = apikey[0]
 
 
 #meta params.
-n_runs = 10
+n_runs = 4
 max_tokens_meta = 20
 
 # # Creating the list of questions
@@ -50,7 +50,7 @@ QL = ["I would be quite bored by a visit to an art gallery.", "I plan ahead and 
 
 # Create list of temperatures:
 #temp_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-temp_list = [0.9]
+temp_list = [0.8]
 
 col_list = []
 for n in range(len(QL)):
@@ -135,7 +135,7 @@ for temp in temp_list:
             #Convert responses to list of responses
             prompt_question_list.append(question)
             resp = str(response['choices'][n].text)
-            print(resp)
+            # print(resp)
             #Isolate number
             # question_list.append(int(resp[-1]))
             question_list.append(resp)
@@ -229,7 +229,7 @@ for temp in temp_list:
             for n in range(n_runs):
                 prompt_question_list.append(question)
                 resp = str(response['choices'][n].text)
-                print(resp)
+                # print(resp)
                 #Isolate number
                 # question_list.append(int(resp[-1]))
                 question_list.append(resp)
