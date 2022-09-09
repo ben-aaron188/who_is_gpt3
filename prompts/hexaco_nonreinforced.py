@@ -40,10 +40,6 @@ QL = ["I would be quite bored by a visit to an art gallery.", "I plan ahead and 
       "When I’m in a group of people, I’m often the one who speaks on behalf of the group.", "I remain unemotional even in situations where most people get very sentimental.",
       "I’d be tempted to use counterfeit money, if I were sure I could get away with it."]
 
-# Create list of desired indexes
-index_list = ['sex', 'age']
-for n in range(1, 61):
-    index_list.append('Q' + str(n))
 
 # Create list of temperatures:
 #temp_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
