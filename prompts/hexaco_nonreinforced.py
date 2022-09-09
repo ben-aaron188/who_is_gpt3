@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Sep  9 11:58:07 2022
+
+@author: nicolarossberg
+"""
 import pandas as pd
 import openai
 
@@ -40,7 +47,6 @@ QL = ["I would be quite bored by a visit to an art gallery.", "I plan ahead and 
       "When I’m in a group of people, I’m often the one who speaks on behalf of the group.", "I remain unemotional even in situations where most people get very sentimental.",
       "I’d be tempted to use counterfeit money, if I were sure I could get away with it."]
 
-
 # Create list of desired indexes
 index_list = ['sex', 'age']
 for n in range(1, 61):
@@ -50,8 +56,10 @@ for n in range(1, 61):
 #temp_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 temp_list = [0.2]
 
+col_list = []
+for n in range(len(QL)):
+    col_list.append('Q' + str(n+1))
 
-# Iterating through every temperature
 for temp in temp_list:
     # Create dataframe for every temperature:
     tempcurrent = pd.DataFrame()
@@ -93,7 +101,7 @@ for temp in temp_list:
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0,
-        n=1)
+        n=n_runs)
     #Convert age-statements into int and append to list
     for n in range(n_runs):
         age = str(response['choices'][n].text)

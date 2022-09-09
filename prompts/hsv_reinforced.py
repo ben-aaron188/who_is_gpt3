@@ -12,7 +12,7 @@ max_tokens_meta = 20
 
 # Creating the list of questions
 QL = ['Thinking up new ideas and being creative is important to them. They like to do things in they own original way.',
-'It is important to them to be rich. They wants to have a lot of money and expensive things.',
+'It is important to them to be rich. They want to have a lot of money and expensive things.',
 'They think it is important that every person in the world should be treated equally. They believe everyone should have equal opportunities in life.',
 'It\'s important to them to show their abilities. They want people to admire what they do.',
 'It is important to them to live in secure surroundings. They avoids anything that might endanger their safety.']#,
