@@ -93,7 +93,7 @@ for temp in temp_list:
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0,
-        n=1)
+        n=n_runs)
     #Convert age-statements into int and append to list
     for n in range(n_runs):
         age = str(response['choices'][n].text)
