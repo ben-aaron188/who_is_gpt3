@@ -42,7 +42,7 @@ QL = ['Thinking up new ideas and being creative is important to them. They like 
 #col_list = ["1.Self-Direction", "2.Power", "3.Universalism", "4.Achievement", "5.Security", "6.Stimulation", "7.Conformity",
  #"8.Universalism", "9.Tradition", "10.Hedonism", "11.Self-Direction", "12.Benevolence", "13.Achievement", "14.Security",
  #"15.Stimulation", "16.Conformity", "17.Power", "18.Benevolence", "19.Universalism", "20.Tradition", "21.Hedonism"]
-col_list = []
+col_list = ['temp']
 for n in range(len(QL)):
     col_list.append('Q' + str(n+1))
 
@@ -56,8 +56,10 @@ for temp in temp_list:
     if temp == 0.0:
         # Create dataframe for every temperature:
         tempcurrent = pd.DataFrame(columns=col_list, index=range(1))
+        tempcurrent['temp'] = [temp]
         # Create dataframe to register prompt sent:
         questcurrent = pd.DataFrame(columns=col_list, index=range(1))
+        questcurrent['temp'] = [temp]
         # Doing 100 runs for temperature
         query = "Now I will briefly describe some people. Please read each description and tell me how much each person is or is not like you.\nWrite your response using the following scale:\n1 = Very much like me\n2 = Like me\n3 = Somewhat like me\n4 = A little like me\n5 = Not like me.\n6 = Not like me at all\nPlease answer the statement, even if you are not completely sure of your response.\nStatement: "
         response_prompt = "\nResponse: "
@@ -66,7 +68,7 @@ for temp in temp_list:
             try:
                 # Complete query
                 fullquestion = query + QL[q] + response_prompt
-                questcurrent.iloc[0, q] = fullquestion
+                questcurrent.iloc[0, q+1] = fullquestion
                 # Ask AI for output
                 response = openai.Completion.create(
                     model="text-davinci-002",
@@ -80,7 +82,7 @@ for temp in temp_list:
 
                 # Store answers into the temperature df
                 g = str(response['choices'][0].text)
-                tempcurrent.iloc[0, q] = g
+                tempcurrent.iloc[0, q+1] = g
                 # Update the query for the next prompt
                 query = fullquestion + g + '\nStatement: '
                 calls += 1
@@ -97,8 +99,10 @@ for temp in temp_list:
     else:
         # Create dataframe for every temperature:
         tempcurrent = pd.DataFrame(columns=col_list, index=range(n_runs))
+        tempcurrent['temp'] = [temp]*n_runs
         # Create dataframe to register prompt sent:
         questcurrent = pd.DataFrame(columns=col_list, index=range(n_runs))
+        questcurrent['temp'] = [temp]*n_runs
         # Doing 100 runs for every temperature (except 0)
         for n in range(n_runs):
             query = "Now I will briefly describe some people. Please read each description and tell me how much each person is or is not like you.\nWrite your response using the following scale:\n1 = Very much like me\n2 = Like me\n3 = Somewhat like me\n4 = A little like me\n5 = Not like me.\n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response.\nStatement: "
@@ -107,7 +111,7 @@ for temp in temp_list:
             for q in range(len(QL)):
                 try:  # Complete query
                     fullquestion = query + QL[q] + response_prompt
-                    questcurrent.iloc[n, q] = fullquestion
+                    questcurrent.iloc[n, q+1] = fullquestion
                     # Ask AI for output
                     response = openai.Completion.create(
                         model="text-davinci-002",
@@ -121,7 +125,7 @@ for temp in temp_list:
 
                     # Store answers into the temperature df
                     g = str(response['choices'][0].text)
-                    tempcurrent.iloc[n, q] = g
+                    tempcurrent.iloc[n, q+1] = g
                     # Update the query for the next prompt
                     query = fullquestion + g + '\nStatement: '
                     calls += 1
