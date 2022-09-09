@@ -60,90 +60,176 @@ col_list = []
 for n in range(len(QL)):
     col_list.append('Q' + str(n+1))
 
+# Iterating through every temperature
 for temp in temp_list:
-    # Create dataframe for every temperature:
-    tempcurrent = pd.DataFrame()
-    prompt_tempcurrent = pd.DataFrame()
-    # Chaning indices for clarity
-    # tempcurrent.index = index_list
-    tempcurrent.index = range(n_runs)
-    prompt_tempcurrent.index = range(n_runs)
-    #Create list for sex
-    sex_list = []
-    prompt_sex_list = []
-    #Request n_runs ages
-    response = openai.Completion.create(
-        model="text-davinci-002",
-        prompt='What is your gender?',
-        temperature=temp,
-        max_tokens=max_tokens_meta,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0,
-        n = n_runs)
-    #Add sexes to list
-    for n in range(n_runs):
-        sex = str(response['choices'][n].text)
-        sex_list.append(sex[2:])
-        prompt_sex_list.append('What is your gender?')
-    #Add sexes to Dataframe:
-    tempcurrent['sex'] = sex_list
-    prompt_tempcurrent['sex'] = prompt_sex_list
-    #Create age list
-    age_list = []
-    prompt_age_list = []
-    #Request n_run ages
-    response = openai.Completion.create(
-        model="text-davinci-002",
-        prompt='How old are you?',
-        temperature=temp,
-        max_tokens=max_tokens_meta,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0,
-        n=n_runs)
-    #Convert age-statements into int and append to list
-    for n in range(n_runs):
-        age = str(response['choices'][n].text)
-        age_list.append([int(s) for s in age.split() if s.isdigit()][0])
-        prompt_age_list.append('How old are you?')
-    #Add ages to Dataframe:
-    tempcurrent['age'] = age_list
-    prompt_tempcurrent['age'] = prompt_age_list
-    #Set i for enumerating purposes:
-    i = 1
-    for question in QL:
-        # General query
-        query = "Below is a statement about you. Please read it and decide how much you agree or disagree with that statement. Write your response using the following scale:/n/n5 = strongly agree/n4 = agree/n3 = neutral/n2 = disagree/n1 = strongly disagree./n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
-        response_prompt = "\nResponse:"
-        # Complete query
-        fullquestion = query + question + response_prompt
-        #Created List for current question
-        question_list = []
-        prompt_question_list = []
-        # Ask AI for output
+    if temp == 0:
+        # Create dataframe for every temperature:
+        tempcurrent = pd.DataFrame()
+        prompt_tempcurrent = pd.DataFrame()
+        # Chaning indices for clarity
+        # tempcurrent.index = index_list
+        tempcurrent.index = range(n_runs)
+        prompt_tempcurrent.index = range(n_runs)
+        #Create list for sex
+        sex_list = []
+        prompt_sex_list = []
+        #Request n_runs ages
         response = openai.Completion.create(
             model="text-davinci-002",
-            prompt=fullquestion,
+            prompt='What is your gender?',
+            temperature=temp,
+            max_tokens=max_tokens_meta,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+            n = 1)
+        #Add sex to lis
+        sex = str(response['choices'][0].text)
+        sex_list.append(sex[2:])
+        prompt_sex_list.append('What is your gender?')
+        #Add sexes to Dataframe:
+        tempcurrent['sex'] = sex_list
+        prompt_tempcurrent['sex'] = prompt_sex_list
+        #Create age list
+        age_list = []
+        prompt_age_list = []
+        #Request n_run ages
+        response = openai.Completion.create(
+            model="text-davinci-002",
+            prompt='How old are you?',
+            temperature=temp,
+            max_tokens=max_tokens_meta,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+            n=1)
+        #Convert age-statements into int and append to list
+        age = str(response['choices'][0].text)
+        age_list.append([int(s) for s in age.split() if s.isdigit()][0])
+        prompt_age_list.append('How old are you?')
+        #Add ages to Dataframe:
+        tempcurrent['age'] = age_list
+        prompt_tempcurrent['age'] = prompt_age_list
+        #Set i for enumerating purposes:
+        i = 1
+        for question in QL:
+            # General query
+            query = "Below is a statement about you. Please read it and decide how much you agree or disagree with that statement. Write your response using the following scale:/n/n5 = strongly agree/n4 = agree/n3 = neutral/n2 = disagree/n1 = strongly disagree./n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
+            response_prompt = "\nResponse:"
+            # Complete query
+            fullquestion = query + question + response_prompt
+            #Created List for current question
+            question_list = []
+            prompt_question_list = []
+            # Ask AI for output
+            response = openai.Completion.create(
+                model="text-davinci-002",
+                prompt=fullquestion,
+                temperature=temp,
+                max_tokens=max_tokens_meta,
+                top_p=1,
+                frequency_penalty=0,
+                presence_penalty=0,
+                n = 1)
+            #Convert responses to list of responses
+            prompt_question_list.append(question)
+            resp = str(response['choices'][n].text)
+            #Isolate number
+            question_list.append(int(resp[-1]))
+            #Append answers to question to dataframe
+            tempcurrent['Q' +str(i)] = question_list
+            prompt_tempcurrent['Q' + str(i)] = prompt_question_list
+            #Increase i by one (indicating next question for enumeration)
+            i += 1
+        # Save temperature dataframe as csv
+        filename = "./data/hexaco/nonreinforced/answers_filename_" + str(temp) + '.csv'
+        prompt_name = "./data/hexaco/nonreinforced/question_filename_" + str(temp) + '.csv'
+        tempcurrent.to_csv(filename)
+        prompt_tempcurrent.to_csv(prompt_name)
+    else:
+        # Create dataframe for every temperature:
+        tempcurrent = pd.DataFrame()
+        prompt_tempcurrent = pd.DataFrame()
+        # Chaning indices for clarity
+        # tempcurrent.index = index_list
+        tempcurrent.index = range(n_runs)
+        prompt_tempcurrent.index = range(n_runs)
+        #Create list for sex
+        sex_list = []
+        prompt_sex_list = []
+        #Request n_runs ages
+        response = openai.Completion.create(
+            model="text-davinci-002",
+            prompt='What is your gender?',
             temperature=temp,
             max_tokens=max_tokens_meta,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0,
             n = n_runs)
-        #Convert responses to list of responses
+        #Add sexes to list
         for n in range(n_runs):
-            prompt_question_list.append(question)
-            resp = str(response['choices'][n].text)
-            #Isolate number
-            question_list.append(int(resp[-1]))
-        #Append answers to question to dataframe
-        tempcurrent['Q' +str(i)] = question_list
-        prompt_tempcurrent['Q' + str(i)] = prompt_question_list
-        #Increase i by one (indicating next question for enumeration)
-        i += 1
-    # Save temperature dataframe as csv
-    filename = "./data/hexaco/nonreinforced/answers_filename_" + str(temp) + '.csv'
-    prompt_name = "./data/hexaco/nonreinforced/question_filename_" + str(temp) + '.csv'
-    tempcurrent.to_csv(filename)
-    prompt_tempcurrent.to_csv(prompt_name)
+            sex = str(response['choices'][n].text)
+            sex_list.append(sex[2:])
+            prompt_sex_list.append('What is your gender?')
+        #Add sexes to Dataframe:
+        tempcurrent['sex'] = sex_list
+        prompt_tempcurrent['sex'] = prompt_sex_list
+        #Create age list
+        age_list = []
+        prompt_age_list = []
+        #Request n_run ages
+        response = openai.Completion.create(
+            model="text-davinci-002",
+            prompt='How old are you?',
+            temperature=temp,
+            max_tokens=max_tokens_meta,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+            n=n_runs)
+        #Convert age-statements into int and append to list
+        for n in range(n_runs):
+            age = str(response['choices'][n].text)
+            age_list.append([int(s) for s in age.split() if s.isdigit()][0])
+            prompt_age_list.append('How old are you?')
+        #Add ages to Dataframe:
+        tempcurrent['age'] = age_list
+        prompt_tempcurrent['age'] = prompt_age_list
+        #Set i for enumerating purposes:
+        i = 1
+        for question in QL:
+            # General query
+            query = "Below is a statement about you. Please read it and decide how much you agree or disagree with that statement. Write your response using the following scale:/n/n5 = strongly agree/n4 = agree/n3 = neutral/n2 = disagree/n1 = strongly disagree./n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
+            response_prompt = "\nResponse:"
+            # Complete query
+            fullquestion = query + question + response_prompt
+            #Created List for current question
+            question_list = []
+            prompt_question_list = []
+            # Ask AI for output
+            response = openai.Completion.create(
+                model="text-davinci-002",
+                prompt=fullquestion,
+                temperature=temp,
+                max_tokens=max_tokens_meta,
+                top_p=1,
+                frequency_penalty=0,
+                presence_penalty=0,
+                n = n_runs)
+            #Convert responses to list of responses
+            for n in range(n_runs):
+                prompt_question_list.append(question)
+                resp = str(response['choices'][n].text)
+                #Isolate number
+                question_list.append(int(resp[-1]))
+            #Append answers to question to dataframe
+            tempcurrent['Q' +str(i)] = question_list
+            prompt_tempcurrent['Q' + str(i)] = prompt_question_list
+            #Increase i by one (indicating next question for enumeration)
+            i += 1
+        # Save temperature dataframe as csv
+        filename = "./data/hexaco/nonreinforced/answers_filename_" + str(temp) + '.csv'
+        prompt_name = "./data/hexaco/nonreinforced/question_filename_" + str(temp) + '.csv'
+        tempcurrent.to_csv(filename)
+        prompt_tempcurrent.to_csv(prompt_name)
