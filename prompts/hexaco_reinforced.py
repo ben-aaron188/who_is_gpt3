@@ -112,7 +112,7 @@ for temp in temp_list:
                     top_p=1,
                     frequency_penalty=0,
                     presence_penalty=0,
-                    n=n_runs)
+                    n=1)
 
                 # Store answers into the temperature df
                 g = str(response['choices'][0].text)
@@ -121,9 +121,8 @@ for temp in temp_list:
                 query = fullquestion + g + '\nStatement: '
                 calls += 1
         # Save temperature dataframe as csv
-        answers_filename = "answers_filename" + str(temp) + '.csv'
+        answers_filename = "./data/hexaco/reinforced/answers_filename" + str(temp) + '.csv'
         tempcurrent.to_csv(answers_filename, index=False)
         # Save question dataframe as csv
-        questions_filename = "questions_filename" + str(temp) + '.csv'
+        questions_filename = "./data/hexaco/reinforced/questions_filename" + str(temp) + '.csv'
         questcurrent.to_csv(questions_filename, index=False)
-        

@@ -135,7 +135,7 @@ for temp in temp_list:
         #Increase i by one (indicating next question for enumeration)
         i += 1
     # Save temperature dataframe as csv
-    filename = "hexaco_non_reinforced_temperature_" + str(temp) + '.csv'
-    prompt_name = "hexaco_non_reinfornced_prompt_temperature" + str(temp) + '.csv'
+    filename = "./data/hexaco/nonreinforced/answers_filename_" + str(temp) + '.csv'
+    prompt_name = "./data/hexaco/nonreinforced/question_filename_" + str(temp) + '.csv'
     tempcurrent.to_csv(filename)
     prompt_tempcurrent.to_csv(prompt_name)

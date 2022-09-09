@@ -120,16 +120,12 @@ for temp in temp_list:
                     query = fullquestion + g + '\nStatement: '
                     calls += 1
             # Save temperature dataframe as csv
-            answers_filename = "answers_filename" + str(temp) + '.csv'
+            answers_filename = "./data/hvs/reinforced/answers_filename" + str(temp) + '.csv'
             tempcurrent.to_csv(answers_filename, index=False)
             # Save question dataframe as csv
-            questions_filename = "questions_filename" + str(temp) + '.csv'
+            questions_filename = "./data/hvs/reinforced/questions_filename" + str(temp) + '.csv'
             questcurrent.to_csv(questions_filename, index=False)
 
     except openai.error.RateLimitError:
         print(f"Rate limit error after {calls} calls.")
         time.sleep(60)
-        
-        
-        
-        
