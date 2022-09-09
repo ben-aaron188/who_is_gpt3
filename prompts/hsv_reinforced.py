@@ -50,17 +50,17 @@ temp_list = [0.0, 0.7]
 # Iterating through every temperature
 calls = 0
 for temp in temp_list:
-    try:
-        if temp == 0.0:
-            # Create dataframe for every temperature:
-            tempcurrent = pd.DataFrame(columns=col_list, index=range(1))
-            # Create dataframe to register prompt sent:
-            questcurrent = pd.DataFrame(columns=col_list, index=range(1))
-            # Doing 100 runs for temperature
-            query = "Now I will briefly describe some people. Please read each description and tell me how much each person is or is not like you.\nWrite your response using the following scale:\n1 = Very much like me\n2 = Like me\n3 = Somewhat like me\n4 = A little like me\n5 = Not like me.\n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response.\nStatement: "
-            response_prompt = "\nResponse: "
-            # run_answers = []
-            for q in range(len(QL)):
+    if temp == 0.0:
+        # Create dataframe for every temperature:
+        tempcurrent = pd.DataFrame(columns=col_list, index=range(1))
+        # Create dataframe to register prompt sent:
+        questcurrent = pd.DataFrame(columns=col_list, index=range(1))
+        # Doing 100 runs for temperature
+        query = "Now I will briefly describe some people. Please read each description and tell me how much each person is or is not like you.\nWrite your response using the following scale:\n1 = Very much like me\n2 = Like me\n3 = Somewhat like me\n4 = A little like me\n5 = Not like me.\n6 = Not like me at all\nPlease answer the statement, even if you are not completely sure of your response.\nStatement: "
+        response_prompt = "\nResponse: "
+        # run_answers = []
+        for q in range(len(QL)):
+            try:
                 # Complete query
                 fullquestion = query + QL[q] + response_prompt
                 questcurrent.iloc[0, q] = fullquestion
@@ -81,25 +81,28 @@ for temp in temp_list:
                 # Update the query for the next prompt
                 query = fullquestion + g + '\nStatement: '
                 calls += 1
-            # Save temperature dataframe as csv
-            answers_filename = "./data/hvs/reinforced/answers_temp_" + str(temp) + '.csv'
-            tempcurrent.to_csv(answers_filename, index=False)
-            # Save question dataframe as csv
-            questions_filename = "./data/hvs/reinforced/questions_temp_" + str(temp) + '.csv'
-            questcurrent.to_csv(questions_filename, index=False)
+            except openai.error.RateLimitError:
+                print(f"Rate limit error after {calls} calls.")
+                time.sleep(60)
+        # Save temperature dataframe as csv
+        answers_filename = "./data/hvs/reinforced/answers_temp_" + str(temp) + '.csv'
+        tempcurrent.to_csv(answers_filename, index=False)
+        # Save question dataframe as csv
+        questions_filename = "./data/hvs/reinforced/questions_temp_" + str(temp) + '.csv'
+        questcurrent.to_csv(questions_filename, index=False)
 
-        else:
-            # Create dataframe for every temperature:
-            tempcurrent = pd.DataFrame(columns=col_list, index=range(n_runs))
-            # Create dataframe to register prompt sent:
-            questcurrent = pd.DataFrame(columns=col_list, index=range(n_runs))
-            # Doing 100 runs for every temperature (except 0)
-            for n in range(n_runs):
-                query = "Now I will briefly describe some people. Please read each description and tell me how much each person is or is not like you.\nWrite your response using the following scale:\n1 = Very much like me\n2 = Like me\n3 = Somewhat like me\n4 = A little like me\n5 = Not like me.\n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response.\nStatement: "
-                response_prompt = "\nResponse: "
-                # run_answers = []
-                for q in range(len(QL)):
-                    # Complete query
+    else:
+        # Create dataframe for every temperature:
+        tempcurrent = pd.DataFrame(columns=col_list, index=range(n_runs))
+        # Create dataframe to register prompt sent:
+        questcurrent = pd.DataFrame(columns=col_list, index=range(n_runs))
+        # Doing 100 runs for every temperature (except 0)
+        for n in range(n_runs):
+            query = "Now I will briefly describe some people. Please read each description and tell me how much each person is or is not like you.\nWrite your response using the following scale:\n1 = Very much like me\n2 = Like me\n3 = Somewhat like me\n4 = A little like me\n5 = Not like me.\n6 = Not like me at all/n/nPlease answer the statement, even if you are not completely sure of your response.\nStatement: "
+            response_prompt = "\nResponse: "
+            # run_answers = []
+            for q in range(len(QL)):
+                try:  # Complete query
                     fullquestion = query + QL[q] + response_prompt
                     questcurrent.iloc[n, q] = fullquestion
                     # Ask AI for output
@@ -119,13 +122,14 @@ for temp in temp_list:
                     # Update the query for the next prompt
                     query = fullquestion + g + '\nStatement: '
                     calls += 1
-            # Save temperature dataframe as csv
-            answers_filename = "./data/hvs/reinforced/answers_temp_" + str(temp) + '.csv'
-            tempcurrent.to_csv(answers_filename, index=False)
-            # Save question dataframe as csv
-            questions_filename = "./data/hvs/reinforced/questions_temp_" + str(temp) + '.csv'
-            questcurrent.to_csv(questions_filename, index=False)
-
-    except openai.error.RateLimitError:
-        print(f"Rate limit error after {calls} calls.")
-        time.sleep(60)
+                except openai.error.RateLimitError:
+                    print(f"Rate limit error after {calls} calls.")
+                    time.sleep(60)
+        # Save temperature dataframe as csv
+        answers_filename = "./data/hvs/reinforced/answers_temp_" + str(temp) + '.csv'
+        tempcurrent.to_csv(answers_filename, index=False)
+        # Save question dataframe as csv
+        questions_filename = "./data/hvs/reinforced/questions_temp_" + str(temp) + '.csv'
+        questcurrent.to_csv(questions_filename, index=False)
+        
+        
