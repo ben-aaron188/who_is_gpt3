@@ -54,7 +54,7 @@ for temp in temp_list:
     if temp == 0.0:
         # Create dataframe for every temperature:
         tempcurrent = pd.DataFrame(columns=col_list, index=range(1))
-        
+
         # Create dataframe to register prompt sent:
         questcurrent = pd.DataFrame(columns=col_list, index=range(1))
         sex_list = []
@@ -206,5 +206,3 @@ for temp in temp_list:
         # Save question dataframe as csv
         questions_filename = "./data/hexaco/reinforced/questions_filename" + str(temp) + '.csv'
         questcurrent.to_csv(questions_filename, index=False)
-        
-   

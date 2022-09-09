@@ -47,7 +47,7 @@ temp_list = [0.1, 0.2]
 # Iterating through every temperature
 calls = 0
 for temp in temp_list:
-    time.sleep(60)
+    # time.sleep(60)
     if temp == 0.0:
         # Answers for temperature = 0
         # Generate 1 row df
