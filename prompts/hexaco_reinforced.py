@@ -1,7 +1,14 @@
 import pandas as pd
 import openai
+import time
 
-openai.api_key = "KEY"
+start_time = time.time()
+
+
+apikey_path = './access_key.txt'
+apikey = open(apikey_path, "r").read().splitlines()
+
+openai.api_key = apikey[0]
 
 #meta params.
 n_runs = 5
@@ -206,3 +213,5 @@ for temp in temp_list:
         # Save question dataframe as csv
         questions_filename = "./data/hexaco/reinforced/questions_filename" + str(temp) + '.csv'
         questcurrent.to_csv(questions_filename, index=False)
+
+print("--- %s seconds ---" % (time.time() - start_time))

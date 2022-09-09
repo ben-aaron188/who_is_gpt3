@@ -1,12 +1,19 @@
 import pandas as pd
 import openai
+import time
 
-openai.api_key = "KEY"
+start_time = time.time()
+
+
+apikey_path = './access_key.txt'
+apikey = open(apikey_path, "r").read().splitlines()
+
+openai.api_key = apikey[0]
 
 
 #meta params.
 n_runs = 2
-max_tokens_meta = 300
+max_tokens_meta = 20
 
 # # Creating the list of questions
 QL = ["I would be quite bored by a visit to an art gallery.", "I plan ahead and organize things, to avoid scrambling at the last minute.",
@@ -222,3 +229,5 @@ for temp in temp_list:
         prompt_name = "./data/hexaco/nonreinforced/question_filename_" + str(temp) + '.csv'
         tempcurrent.to_csv(filename)
         prompt_tempcurrent.to_csv(prompt_name)
+
+print("--- %s seconds ---" % (time.time() - start_time))
