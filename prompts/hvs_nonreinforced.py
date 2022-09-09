@@ -42,7 +42,7 @@ QL = ['Thinking up new ideas and being creative is important to them. They like 
 #col_list = ["1.Self-Direction", "2.Power", "3.Universalism", "4.Achievement", "5.Security", "6.Stimulation", "7.Conformity",
  #"8.Universalism", "9.Tradition", "10.Hedonism", "11.Self-Direction", "12.Benevolence", "13.Achievement", "14.Security",
  #"15.Stimulation", "16.Conformity", "17.Power", "18.Benevolence", "19.Universalism", "20.Tradition", "21.Hedonism"]
-col_list = []
+col_list = ['temp']
 for n in range(len(QL)):
     col_list.append('Q' + str(n+1))
 
@@ -59,9 +59,13 @@ for temp in temp_list:
         # Generate 1 row df
         temp0 = pd.DataFrame()
         temp0.index = range(1)
+        # add a column to record the temperature used
+        temp0['temp'] = [temp]
         # Create dataframe to register prompt sent:
         quest_temp0 = pd.DataFrame()
         quest_temp0.index = range(1)
+        # add a column to record the temperature used
+        quest_temp0['temp'] = [temp]
         # Iterate through questions
         for question in QL:
             try:
@@ -106,10 +110,14 @@ for temp in temp_list:
         tempcurrent = pd.DataFrame()
         # Changing indices for clarity
         tempcurrent.index = range(n_runs)
+        # add a column to record the temperature used
+        tempcurrent['temp'] = [temp]*n_runs
         # Create dataframe to register prompt sent:
         quest_tempcurrent = pd.DataFrame()
         # Changing indices for clarity
         quest_tempcurrent.index = range(n_runs)
+        # add a column to record the temperature used
+        quest_tempcurrent['temp'] = [temp]*n_runs
         # Doing 100 runs for every temperature (except 0)
         for question in QL:
             try:
