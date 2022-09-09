@@ -47,7 +47,7 @@ QL = ["I would be quite bored by a visit to an art gallery.", "I plan ahead and 
        "I’d be tempted to use counterfeit money, if I were sure I could get away with it."]
 
 # Create List of desired indexes
-col_list = []
+col_list = ['temp']
 for n in range(len(QL)):
     col_list.append('Q' + str(n+1))
 
@@ -61,9 +61,11 @@ for temp in temp_list:
     if temp == 0.0:
         # Create dataframe for every temperature:
         tempcurrent = pd.DataFrame(columns=col_list, index=range(1))
-
         # Create dataframe to register prompt sent:
         questcurrent = pd.DataFrame(columns=col_list, index=range(1))
+        # set a column for temperature
+        tempcurrent['temp'] = [temp]
+        prompt_tempcurrent['temp'] = [temp]
         sex_list = []
         prompt_sex_list = []
         #Request n_runs ages
@@ -105,14 +107,14 @@ for temp in temp_list:
         #Add ages to Dataframe:
         tempcurrent['age'] = age_list
         questcurrent['age'] = prompt_age_list
-        # Doing 100 runs for temperature
+        # Doing 1 run for temperature 0.0
         query = "Below is a statement about you. Please read it and decide how much you agree or disagree with that statement. Write your response using the following scale:/n/n5 = strongly agree/n4 = agree/n3 = neutral/n2 = disagree/n1 = strongly disagree./n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
         response_prompt = "\nResponse: "
         # run_answers = []
         for q in range(len(QL)):
             # Complete query
             fullquestion = query + QL[q] + response_prompt
-            questcurrent.iloc[0, q] = fullquestion
+            questcurrent.iloc[0, q+1] = fullquestion
             # Ask AI for output
             response = openai.Completion.create(
                 model="text-davinci-002",
@@ -126,7 +128,7 @@ for temp in temp_list:
 
             # Store answers into the temperature df
             g = str(response['choices'][0].text)
-            tempcurrent.iloc[0, q] = g
+            tempcurrent.iloc[0, q+1] = g
             # Update the query for the next prompt
             query = fullquestion + g + '\nStatement: '
             calls += 1
@@ -142,6 +144,9 @@ for temp in temp_list:
         tempcurrent = pd.DataFrame(columns=col_list, index=range(n_runs))
         # Create dataframe to register prompt sent:
         questcurrent = pd.DataFrame(columns=col_list, index=range(n_runs))
+        # set a column for temperature
+        tempcurrent['temp'] = [temp]*n_runs
+        prompt_tempcurrent['temp'] = [temp]*n_runs
         # Doing 100 runs for every temperature (except 0)
         sex_list = []
         prompt_sex_list = []
@@ -193,7 +198,7 @@ for temp in temp_list:
             for q in range(len(QL)):
                 # Complete query
                 fullquestion = query + QL[q] + response_prompt
-                questcurrent.iloc[n, q] = fullquestion
+                questcurrent.iloc[n, q+1] = fullquestion
                 # Ask AI for output
                 response = openai.Completion.create(
                     model="text-davinci-002",
@@ -207,7 +212,7 @@ for temp in temp_list:
 
                 # Store answers into the temperature df
                 g = str(response['choices'][0].text)
-                tempcurrent.iloc[n, q] = g
+                tempcurrent.iloc[n, q+1] = g
                 # Update the query for the next prompt
                 query = fullquestion + g + '\nStatement: '
                 calls += 1
