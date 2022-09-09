@@ -98,7 +98,7 @@ for temp in temp_list:
         n=1)
     #Convert age-statements into int and append to list
     for n in range(n_runs):
-        age = str(response['choices'][0].text)
+        age = str(response['choices'][n].text)
         age_list.append([int(s) for s in age.split() if s.isdigit()][0])
     #Add ages to Dataframe:
     tempcurrent['age'] = age_list
@@ -125,10 +125,11 @@ for temp in temp_list:
         #Convert responses to list of responses
         for n in range(n_runs):
             question = str(response['choices'][n].text)
+            question_list.append(question)
             #Isolate number
             #question_list.append(int(s) for s in question.split() if s.isdigit()[0])
         #Append answers to question to dataframe
-        tempcurrent[i] = question
+        tempcurrent[i] = question_list
         #Increase i by one (indicating next question for enumeration)
         i += 1
     # Save temperature dataframe as csv
