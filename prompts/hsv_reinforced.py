@@ -14,8 +14,9 @@ max_tokens_meta = 20
 QL = ['Thinking up new ideas and being creative is important to them. They like to do things in they own original way.',
 'It is important to them to be rich. They want to have a lot of money and expensive things.',
 'They think it is important that every person in the world should be treated equally. They believe everyone should have equal opportunities in life.',
-'It\'s important to them to show their abilities. They want people to admire what they do.',
-'It is important to them to live in secure surroundings. They avoids anything that might endanger their safety.']#,
+'It is important to them to show their abilities. They want people to admire what they do.',
+'It is important to them to live in secure surroundings. They avoid anything that might endanger their safety.']
+#,
 #'They like surprises and are always looking for new things to do. They think it is important to do lots of different things in life.',
 #'They believe that people should do what they\'re told. They think people should follow rules at all times, even when no-one is watching.',
 #'It is important to them to listen to people who are different from them. Even when they disagree with them, they still want to understand them.',
@@ -131,5 +132,3 @@ for temp in temp_list:
         # Save question dataframe as csv
         questions_filename = "./data/hvs/reinforced/questions_temp_" + str(temp) + '.csv'
         questcurrent.to_csv(questions_filename, index=False)
-        
-        

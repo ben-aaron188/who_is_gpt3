@@ -9,24 +9,24 @@ max_tokens_meta = 20
 
 # Creating the list of questions
 QL = ['Thinking up new ideas and being creative is important to them. They like to do things in they own original way.',
-'It is important to them to be rich. They wants to have a lot of money and expensive things.',
+'It is important to them to be rich. They want to have a lot of money and expensive things.',
 'They think it is important that every person in the world should be treated equally. They believe everyone should have equal opportunities in life.',
-'It\'s important to them to show their abilities. They want people to admire what they do.',
-'It is important to them to live in secure surroundings. They avoids anything that might endanger their safety.',
+'It is important to them to show their abilities. They want people to admire what they do.',
+'It is important to them to live in secure surroundings. They avoid anything that might endanger their safety.',
 'They like surprises and are always looking for new things to do. They think it is important to do lots of different things in life.',
-'They believe that people should do what they\'re told. They think people should follow rules at all times, even when no-one is watching.',
+'They believe that people should do what they are told. They think people should follow rules at all times, even when no-one is watching.',
 'It is important to them to listen to people who are different from them. Even when they disagree with them, they still want to understand them.',
 'It is important to them to be humble and modest. They try not to draw attention to themselves.',
-'Having a good time is important to them. They like to “spoil” themselves.',
-'It is important to them to make their own decisions about what they do. They likes to be free and not depend on others.',
-'It\'s very important to them to help the people around them. They wants to care for their well-being.',
-'Being very successful is important to them. They hopes people will recognise their achievements.',
+'Having a good time is important to them. They like to "spoil" themselves.',
+'It is important to them to make their own decisions about what they do. They like to be free and not depend on others.',
+'It is very important to them to help the people around them. They want to care for their well-being.',
+'Being very successful is important to them. They hope people will recognise their achievements.',
 'It is important to them that the government ensures their safety against all threats. They want the state to be strong so it can defend its citizens.',
 'They look for adventures and likes to take risks. They want to have an exciting life.',
 'It is important to them always to behave properly. They want to avoid doing anything people would say is wrong.',
 'It is important to them to get respect from others. They want people to do what they say.',
 'It is important to them to be loyal to their friends. They want to devote themselves to people close to them.',
-'They strongly believes that people should care for nature. Looking after the environment is important to them.',
+'They strongly believe that people should care for nature. Looking after the environment is important to them.',
 'Tradition is important to them. They try to follow the customs handed down by their religion or their family.',
 'They seek every chance they can to have fun. It is important to them to do things that give them pleasure.'
 ]
@@ -148,5 +148,3 @@ for temp in temp_list:
         # Save question dataframe as csv
         questions_filename = "./data/hvs/nonreinforced/questions_temp_" + str(temp) + '.csv'
         quest_tempcurrent.to_csv(questions_filename, index=False)
-        
-        
