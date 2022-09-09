@@ -147,8 +147,8 @@ for temp in temp_list:
         # Save temperature dataframe as csv
         filename = "./data/hexaco/nonreinforced/answers_filename_" + str(temp) + '.csv'
         prompt_name = "./data/hexaco/nonreinforced/question_filename_" + str(temp) + '.csv'
-        tempcurrent.to_csv(filename)
-        prompt_tempcurrent.to_csv(prompt_name)
+        tempcurrent.to_csv(filename, index=False)
+        prompt_tempcurrent.to_csv(prompt_name, index=False)
     else:
         # Create dataframe for every temperature:
         tempcurrent = pd.DataFrame()
@@ -241,7 +241,7 @@ for temp in temp_list:
         # Save temperature dataframe as csv
         filename = "./data/hexaco/nonreinforced/answers_filename_" + str(temp) + '.csv'
         prompt_name = "./data/hexaco/nonreinforced/question_filename_" + str(temp) + '.csv'
-        tempcurrent.to_csv(filename)
-        prompt_tempcurrent.to_csv(prompt_name)
+        tempcurrent.to_csv(filename, index=False)
+        prompt_tempcurrent.to_csv(prompt_name, index=False)
 
 print("--- %s seconds ---" % (time.time() - start_time))
