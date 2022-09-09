@@ -64,8 +64,11 @@ for temp in temp_list:
         prompt_tempcurrent = pd.DataFrame()
         # Chaning indices for clarity
         # tempcurrent.index = index_list
-        tempcurrent.index = range(n_runs)
-        prompt_tempcurrent.index = range(n_runs)
+        tempcurrent.index = range(1)
+        prompt_tempcurrent.index = range(1)
+        # set a column for temperature
+        tempcurrent['temp'] = [temp]
+        prompt_tempcurrent['temp'] = [temp]
         #Create list for sex
         sex_list = []
         prompt_sex_list = []
@@ -154,6 +157,9 @@ for temp in temp_list:
         # tempcurrent.index = index_list
         tempcurrent.index = range(n_runs)
         prompt_tempcurrent.index = range(n_runs)
+        # set a column for temperature
+        tempcurrent['temp'] = [temp]*n_runs
+        prompt_tempcurrent['temp'] = [temp]*n_runs
         #Create list for sex
         sex_list = []
         prompt_sex_list = []
