@@ -108,7 +108,7 @@ for temp in temp_list:
         tempcurrent['age'] = age_list
         questcurrent['age'] = prompt_age_list
         # Doing 1 run for temperature 0.0
-        query = "Below is a statement about you. Please read it and decide how much you agree or disagree with that statement. Write your response using the following scale:/n/n5 = strongly agree/n4 = agree/n3 = neutral/n2 = disagree/n1 = strongly disagree./n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
+        query = "Below is a statement about you. Please read it and decide how much you agree or disagree with that statement. Write your response using the following scale:\n\n5 = strongly agree\n4 = agree\n3 = neutral\n2 = disagree\n1 = strongly disagree.\n\nPlease answer the statement, even if you are not completely sure of your response.\n\nStatement:"
         response_prompt = "\nResponse: "
         # run_answers = []
         for q in range(len(QL)):
@@ -128,6 +128,7 @@ for temp in temp_list:
 
             # Store answers into the temperature df
             g = str(response['choices'][0].text)
+            g = g.strip('\n')
             tempcurrent.iloc[0, q+1] = g
             # Update the query for the next prompt
             query = fullquestion + g + '\nStatement: '
@@ -192,7 +193,7 @@ for temp in temp_list:
         tempcurrent['age'] = age_list
         questcurrent['age'] = prompt_age_list
         for n in range(n_runs):
-            query = "Below is a statement about you. Please read it and decide how much you agree or disagree with that statement. Write your response using the following scale:/n/n5 = strongly agree/n4 = agree/n3 = neutral/n2 = disagree/n1 = strongly disagree./n/nPlease answer the statement, even if you are not completely sure of your response./n/nStatement:"
+            query = "Below is a statement about you. Please read it and decide how much you agree or disagree with that statement. Write your response using the following scale:\n\n5 = strongly agree\n4 = agree\n3 = neutral\n2 = disagree\n1 = strongly disagree.\n\nPlease answer the statement, even if you are not completely sure of your response.\n\nStatement:"
             response_prompt = "\nResponse: "
             # run_answers = []
             for q in range(len(QL)):
@@ -212,6 +213,7 @@ for temp in temp_list:
 
                 # Store answers into the temperature df
                 g = str(response['choices'][0].text)
+                g = g.strip('\n')
                 tempcurrent.iloc[n, q+1] = g
                 # Update the query for the next prompt
                 query = fullquestion + g + '\nStatement: '
