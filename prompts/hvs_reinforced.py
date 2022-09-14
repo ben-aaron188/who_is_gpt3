@@ -10,7 +10,7 @@ apikey = open(apikey_path, "r").read().splitlines()
 openai.api_key = apikey[0]
 
 #meta params.
-n_runs = 10
+n_runs = 100
 max_tokens_meta = 20
 
 # Creating the list of questions
