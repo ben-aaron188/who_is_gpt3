@@ -10,7 +10,7 @@ apikey = open(apikey_path, "r").read().splitlines()
 openai.api_key = apikey[0]
 
 #meta params.
-n_runs = 5
+n_runs = 10
 max_tokens_meta = 20
 
 # Creating the list of questions
@@ -48,7 +48,7 @@ for n in range(len(QL)):
 
 # Create list of temperatures:
 #temp_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-temp_list = [0.0, 0.7]
+temp_list = [0.2, 0.4, 0.6, 0.8, 1.0]
 
 # Iterating through every temperature
 calls = 0
@@ -68,6 +68,7 @@ for temp in temp_list:
             try:
                 # Complete query
                 fullquestion = query + QL[q] + response_prompt
+                print(fullquestion)
                 questcurrent.iloc[0, q+1] = fullquestion
                 # Ask AI for output
                 response = openai.Completion.create(
@@ -82,6 +83,7 @@ for temp in temp_list:
 
                 # Store answers into the temperature df
                 g = str(response['choices'][0].text)
+                g = g.strip('\n')
                 tempcurrent.iloc[0, q+1] = g
                 # Update the query for the next prompt
                 query = fullquestion + g + '\nStatement: '
@@ -125,6 +127,7 @@ for temp in temp_list:
 
                     # Store answers into the temperature df
                     g = str(response['choices'][0].text)
+                    g = g.strip('\n')
                     tempcurrent.iloc[n, q+1] = g
                     # Update the query for the next prompt
                     query = fullquestion + g + '\nStatement: '
