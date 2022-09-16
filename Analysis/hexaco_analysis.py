@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Sep 12 12:51:10 2022
+
+@author: nicolarossberg
+"""
 import pandas as pd
 import statistics
 from statistics import mean
@@ -363,3 +370,44 @@ for item in factor_list:
 wf = pd.DataFrame([mean_whole_set])
 
 wf.to_csv('SD_whole_dataset.csv')
+    
+
+#Calculate correlations
+df = pd.read_csv('hexaco_plus_facets.csv')
+df2 = df[['temp', 'openness_to_experience', 'honesty_humility', 'extraversion', 'emotionality', 'agreeableness', 'conscientiousness']]
+df3 = df[['openness_to_experience', 'honesty_humility', 'extraversion', 'emotionality', 'agreeableness', 'conscientiousness']]
+
+t = df3.corr()
+for value in temp_list:
+    temp_dict = {}
+    temp_dict['openness_to_experience'] = []
+    temp_dict['honesty_humility'] = []
+    temp_dict['extraversion'] = []
+    temp_dict['emotionality'] = []
+    temp_dict['agreeableness'] = []
+    temp_dict['conscientiousness'] = []
+    for index, row in df2.iterrows():
+        temp = row['temp']
+        if str(temp) == str(value):
+            temp_dict['openness_to_experience'].append(row['openness_to_experience'])
+            temp_dict['honesty_humility'].append(row['honesty_humility'])
+            temp_dict['extraversion'].append(row['extraversion'])
+            temp_dict['emotionality'].append(row['emotionality'])
+            temp_dict['agreeableness'].append(row['agreeableness'])
+            temp_dict['conscientiousness'].append(row['conscientiousness'])
+        else:
+            continue
+    f = pd.DataFrame().from_dict(temp_dict)
+    f.to_csv('dataset_split_by_temp' + str(value) +'.csv')
+         
+for value in temp_list:
+    t = pd.read_csv('dataset_split_by_temp' + str(value) +'.csv')
+    p = t.corr()
+    p.to_csv('correlation_' + str(value) + '.csv')
+         
+main_facets = ['openness_to_experience', 'honesty_humility', 'extraversion', 'emotionality', 'agreeableness', 'conscientiousness']
+for value in temp_list:
+    t = pd.read_csv('dataset_split_by_temp' + str(value) +'.csv')
+    t = t.drop('Unnamed: 0', axis=1)
+    for x in main_facets:
+        
