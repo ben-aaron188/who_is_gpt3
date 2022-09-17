@@ -1,7 +1,7 @@
 library(rstatix)
 library(car)
 
-hvs_nonreinf <- read.csv('/Users/Marilu/Desktop/NLP/GPT-3/Scripts/data/hvs_plus_values.csv')
+hvs_nonreinf <- read.csv('.data/hvs/nonreinforced/nonhvs_plus_values.csv')
 hvs <- hvs_nonreinf %>%
   select(temp, Conformity, Tradition, Benevolence, Universalism, Self_Direction, Stimulation,
          Hedonism, Achievement, Power, Security) #%>%
