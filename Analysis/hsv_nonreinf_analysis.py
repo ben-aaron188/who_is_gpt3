@@ -2,7 +2,7 @@ import pandas as pd
 from scipy.stats import spearmanr
 from statsmodels.formula.api import glm
 
-hvs_full = pd.read_csv (r'data/hvs_nonreinf_full_data_cleaned.csv')
+hvs_full = pd.read_csv (r'.data/hvs/nonreinforced/hvs_nonreinf_full_data_cleaned.csv')
 hvs_full = hvs_full.dropna()
 # Reverse likert scale scoring
 def reverseScoring(df, high, cols):
@@ -51,12 +51,12 @@ for k in values_dict:
 hvs = hsv_reversed.copy()
 for k in values_dict:
     hvs[k] = hsv_reversed[values_dict[k]].mean(axis=1)
-hvs.to_csv('data/hvs_plus_values.csv', index=False)
+hvs.to_csv('.data/hvs/nonreinforced/hvs_plus_values.csv', index=False)
 
 corr_tab = hvs.iloc[:,22:].corr(method ='spearman')
 corr_tab = corr_tab.round(decimals = 2)
 variance = round(hvs.iloc[:,22:].var(),2)
-corr_tab.to_csv(r'tabs/corr_tab.csv', index = False)
+corr_tab.to_csv(r'.data/hvs_descriptives/corr_tab.csv', index = False)
 
 # correlation tab by temperature
 hvs_by_temp = []
@@ -68,7 +68,7 @@ for t in hvs_by_temp:
     corr_tab = t.iloc[:, 22:].corr(method='spearman')
     corr_tab = corr_tab.round(decimals=2)
     hvs_corr_by_temp.append(corr_tab)
-    corr_tab.to_csv(r'tabs/corr_by_temp/corr_'+str(temp)+'.csv')
+    corr_tab.to_csv(r'.data/hvs_descriptives/corr_by_temp/corr_'+str(temp)+'.csv')
     temp+=1
 
 # Overall Stats
@@ -83,7 +83,7 @@ for v in values:
     sd_values.append(sd)
     median_values.append(median)
 overall_stats = pd.DataFrame({'values': values, 'Mean': mean_values, 'SD': sd_values, 'Median': median_values})
-overall_stats.to_csv('tabs/overall_stats.csv', index=False)
+overall_stats.to_csv('.data/hvs_descriptives/overall_stats.csv', index=False)
 
 # Look at overall mean and SD with centered data
 center_function = lambda x: x - x.mean()
@@ -104,7 +104,7 @@ overall_stats_centered = pd.DataFrame({'values_C': values, 'Mean_C': mean_center
 # Combine overall mean stats with overall centered mean
 combined_overall_stats = pd.concat([overall_stats, overall_stats_centered], axis=1)
 combined_overall_stats.drop(['values_C', 'Median'], axis=1)
-combined_overall_stats.to_csv('tabs/overall_stats_centered.csv', index=False)
+combined_overall_stats.to_csv('.data/hvs_descriptives/overall_stats_centered.csv', index=False)
 
 # Mean (SD) by temperature
 hvs_mean_SD_by_temp = pd.DataFrame()
@@ -129,7 +129,7 @@ for v in values:
 
 hvs_mean_SD_by_temp = hvs_mean_SD_by_temp.append(hsv_total_mean_SD, ignore_index=True)
 hvs_mean_SD_by_temp = hvs_mean_SD_by_temp.transpose()
-hvs_mean_SD_by_temp.to_csv('tabs/mean_SD_by_temp.csv', index=False)
+hvs_mean_SD_by_temp.to_csv('.data/hvs_descriptives/mean_SD_by_temp.csv', index=False)
 
 # Median by temperature
 hvs_median_by_temp = pd.DataFrame()
@@ -150,7 +150,7 @@ for v in values:
 
 hvs_median_by_temp = hvs_median_by_temp.append(hsv_total_median, ignore_index=True)
 hvs_median_by_temp = hvs_median_by_temp.transpose()
-hvs_median_by_temp.to_csv('tabs/median_by_temp.csv', index=False)
+hvs_median_by_temp.to_csv('.data/hvs_descriptives/median_by_temp.csv', index=False)
 
 # Regression Value ~ Temperature
 GLM_models = {}
@@ -171,7 +171,7 @@ for v in values:
 
 GLM_tab = pd.DataFrame({'Coefficient':coef, 'Std Err':std_err, 'CI':CI},
                           index=values)
-GLM_tab.to_csv('tabs/GLM_coefficients.csv')
+GLM_tab.to_csv('.data/hvs_descriptives/GLM_coefficients.csv')
 
 # MANOVA
 from statsmodels.multivariate.manova import MANOVA
