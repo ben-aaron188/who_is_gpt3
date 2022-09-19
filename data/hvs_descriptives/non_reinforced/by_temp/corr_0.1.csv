@@ -1,0 +1,11 @@
+,Conformity,Tradition,Benevolence,Universalism,Self_Direction,Stimulation,Hedonism,Achievement,Power,Security
+Conformity,1.0,-0.09,,,,,-0.05,,,
+Tradition,-0.09,1.0,,,,,-0.11,,,
+Benevolence,,,,,,,,,,
+Universalism,,,,,,,,,,
+Self_Direction,,,,,,,,,,
+Stimulation,,,,,,,,,,
+Hedonism,-0.05,-0.11,,,,,1.0,,,
+Achievement,,,,,,,,,,
+Power,,,,,,,,,,
+Security,,,,,,,,,,
